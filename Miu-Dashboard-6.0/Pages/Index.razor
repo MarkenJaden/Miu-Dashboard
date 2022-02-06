@@ -1,0 +1,117 @@
+﻿@page "/"
+@page "/{guildId:long}"
+@using Microsoft.EntityFrameworkCore
+@using Miu_Dashboard_6._0.models
+@using Miu_Dashboard_6._0.Utils
+
+@inject IDbContextFactory<miudiscordbotContext> _dbFactory
+@inject NavigationManager _nav
+@inject IJSRuntime _jsRuntime
+
+@{
+    var context = _dbFactory.CreateDbContext();
+}
+
+<PageTitle>Dashboard</PageTitle>
+
+<div class="container-fluid">
+    <div class="d-sm-flex justify-content-between align-items-center mb-4">
+        <h3 class="text-dark mb-0">Dashboard</h3>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-xl-3 mb-4">
+            <div class="card border-start-primary py-2" style="border-left: 5px solid rgb(78,115,223);box-shadow: 3px 3px 10px;">
+                <div class="card-body">
+                    <div class="row align-items-center no-gutters">
+                        <div class="col me-2">
+                            <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Total Queued</span></div>
+                            <div class="text-dark fw-bold h5 mb-0"><span>@context.Histories.Count(x => x.GuildId == guildId)</span></div>
+                        </div>
+                        <div class="col-auto"><i class="fas fa-history fa-2x"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-3 mb-4">
+            <div class="card border-start-success py-2" style="box-shadow: 3px 3px 10px;border-left: 5px solid rgb(28,200,138) ;">
+                <div class="card-body">
+                    <div class="row align-items-center no-gutters">
+                        <div class="col me-2">
+                            <div class="text-uppercase text-success fw-bold text-xs mb-1"><span>Total Played</span></div>
+                            <div class="text-dark fw-bold h5 mb-0"><span>@context.Histories.Count(x => x.GuildId == guildId && x.Played)</span></div>
+                        </div>
+                        <div class="col-auto"><i class="fas fa-play fa-2x"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-3 mb-4">
+            <div class="card border-start-info py-2" style="box-shadow: 3px 3px 10px;border-left: 5px solid rgb(54,185,204) ;">
+                <div class="card-body">
+                    <div class="row align-items-center no-gutters">
+                        <div class="col me-2">
+                            <div class="text-uppercase text-info fw-bold text-xs mb-1"><span>Ranking (All Discords)</span></div>
+                            <div class="text-dark fw-bold h5 mb-0 me-3"><span>#@(context.Histories.AsEnumerable().GroupBy(x => x.GuildId).OrderByDescending(x => x.Count()).ToList().FindIndex(grouping => grouping.Key == guildId) + 1)</span></div>
+                        </div>
+                        <div class="col-auto"><i class="fas fa-chart-line fa-2x"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-3 mb-4">
+            <div class="card border-start-warning py-2" style="box-shadow: 3px 3px 10px;border-left: 5px solid rgb(246,194,62) ;">
+                <div class="card-body">
+                    <div class="row align-items-center no-gutters">
+                        <div class="col me-2">
+                            <div class="text-uppercase text-warning fw-bold text-xs mb-1"><span>Currently Queued</span></div>
+                            <div class="text-dark fw-bold h5 mb-0"><span>@context.Histories.Count(x => x.GuildId == guildId && x.Queued)</span></div>
+                        </div>
+                        <div class="col-auto"><i class="fas fa-cogs fa-2x"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- Start: Chart -->
+    <div class="row">
+        <div class="col">
+            <div class="card mb-4" style="box-shadow: 3px 3px 10px;">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h6 class="text-primary fw-bold m-0">Queued VS actually played songs</h6>
+                    <div class="dropdown no-arrow">
+                        <button class="btn btn-link btn-sm dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button"><i class="fas fa-ellipsis-v text-gray-400"></i></button>
+                        <div class="dropdown-menu shadow dropdown-menu-end animated--fade-in">
+                            <p class="text-center dropdown-header">dropdown header:</p><a class="dropdown-item" href="#">&nbsp;Action</a><a class="dropdown-item" href="#">&nbsp;Another action</a>
+                            <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Something else here</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <ApexChart TItem="History" Height="500">
+                        <ApexPointSeries TItem="History" Items="context.Histories.Where(x => x.GuildId == guildId)" SeriesType="SeriesType.Area" Name="Queued" XValue="history => Utils.JavaTimeStampToDateTime(history.DateTime).ToShortDateString()" YAggregate="histories => histories.Count()"></ApexPointSeries>
+                        <ApexPointSeries TItem="History" Items="context.Histories.Where(x => x.GuildId == guildId)" SeriesType="SeriesType.Area" Name="Actually played" XValue="history => Utils.JavaTimeStampToDateTime(history.DateTime).ToShortDateString()" YAggregate="histories => histories.Count(x => x.Played)"></ApexPointSeries>
+                    </ApexChart>
+                </div>
+            </div>
+        </div>
+    </div><!-- End: Chart -->
+</div>
+
+@code
+{
+    [Parameter]
+    public long guildId { get; set; } = 1;
+
+    private System.Timers.Timer timer;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        timer = new(500);
+        timer.Elapsed += (_, _) =>
+        {
+            InvokeAsync(StateHasChanged);
+        };
+        timer.AutoReset = true;
+        timer.Enabled = true;
+    }
+}

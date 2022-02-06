@@ -1,0 +1,56 @@
+﻿@page "/table/{guildId:long}"
+@using Microsoft.EntityFrameworkCore
+@using Miu_Dashboard_6._0.models
+@using Miu_Dashboard_6._0.Utils
+
+@inject IDbContextFactory<miudiscordbotContext> _dbFactory
+@inject NavigationManager _nav
+@inject IJSRuntime _jsRuntime
+
+@{
+    var dbContext = _dbFactory.CreateDbContext();
+}
+
+<div class="container-fluid">
+    <h3 class="text-dark mb-4">History</h3>
+    <div class="card shadow">
+        <div class="card-body">
+            <Table @ref="table" TItem="History" DataSource="dbContext.Histories.Where(x => x.GuildId == guildId).ToList().OrderByDescending(history => Utils.JavaTimeStampToDateTime(history.DateTime))" Responsive>
+                <Column @bind-Field="@(context.Name)" Sortable Filterable></Column>
+                <Column @bind-Field="@(context.Link)" Sortable Filterable>
+                    <a href="@context.Link" target="_blank">@context.Link</a>
+                </Column>
+                <Column @bind-Field="@(context.Queued)" Filterable>
+                    <i class="@(!context.Queued ? "fas fa-times" : "fas fa-check")"></i>
+                </Column>
+                <Column @bind-Field="@(context.Played)" Filterable>
+                    <i class="@(!context.Played ? "fas fa-times" : "fas fa-check")"></i>
+                </Column>
+                <Column Title="Date and Time" Field="Utils.JavaTimeStampToDateTime(context.DateTime)"></Column>
+            </Table>
+        </div>
+    </div>
+</div>
+
+@code
+{
+    [Parameter]
+    public long guildId { get; set; } = 1;
+
+    ITable table;
+
+    private System.Timers.Timer timer;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        timer = new(2000);
+        timer.Elapsed += (_, _) =>
+        {
+            table.ReloadData();
+            InvokeAsync(StateHasChanged);
+        };
+        timer.AutoReset = true;
+        timer.Enabled = true;
+    }
+}

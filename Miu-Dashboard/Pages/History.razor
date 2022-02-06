@@ -1,0 +1,221 @@
+﻿@page "/"
+@page "/{guildId:long}"
+@page "/history/{guildId:long}"
+@page "/history/{guildId:long}/{currentPage:int}"
+@using Microsoft.EntityFrameworkCore
+@using Miu_Dashboard.models
+
+@inject IDbContextFactory<miudiscordbotContext> _dbFactory
+@inject NavigationManager _nav
+@inject IJSRuntime _jsRuntime
+
+<div class="container-fluid">
+    <h3 class="text-dark mb-4">History</h3>
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 text-nowrap">
+                    <div id="dataTable_length" class="dataTables_length" aria-controls="dataTable">
+                        <label class="form-label">
+                            Show&nbsp;<select class="d-inline-block form-select form-select-sm" @onchange="@OnMaxChanged">
+                                <option value="10" selected="">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>&nbsp;
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-6"></div>
+            </div>
+            <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                <table class="table my-0" id="dataTable">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Link</th>
+                            <th>In queue</th>
+                            <th>Played</th>
+                            <th>Date and Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (history == null)
+                        {
+                        <div class="row">
+                            <div class="col-12 alert alert-info">
+                                Loading...
+                            </div>
+                        </div>
+                        }
+                        @if (history is { Count: 0 })
+                        {
+                        <div class="row">
+                            <div class="col-12 alert alert-warning">
+                                Looks like you haven't used the bot yet :(
+                            </div>
+                        </div>
+                        }
+                        @if (history != null)
+                        {
+                        @foreach (models.History hist in history)
+                            {
+                        <tr>
+                            <td><i class="fas fa-music" style="padding-right: 10px;"></i>@hist.Name</td>
+                            <td><a href="@hist.Link" target="_blank">@hist.Link</a></td>
+                            <td><i class="@(!hist.Queued ? "fas fa-times" : "fas fa-check")"></i></td>
+                            <td><i class="@(!hist.Played ? "fas fa-times" : "fas fa-check")"></i></td>
+                            <td>@JavaTimeStampToDateTime(hist.DateTime)</td>
+                        </tr>
+                            }
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td><strong>Title</strong></td>
+                            <td><strong>Link</strong></td>
+                            <td><strong>In queue</strong></td>
+                            <td><strong>Played</strong></td>
+                            <td><strong>Date and Time</strong></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="row">
+                <div class="col-md-6 align-self-center">
+                    <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Showing @(currentPage - 1 * max - max + 1 < 0 ? currentPage * max - max + 1 : 0) to @GetShowingTo() of @count</p>
+                </div>
+                <div class="col-md-6">
+                    <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
+                        <ul class="pagination">
+                            <li class="page-item @(!backward ? "disabled" : "")"><a class="page-link" href="@(currentPage - 1 < 1 ? "" : $"/history/{guildId}/{currentPage-1}")" aria-label="Previous" style="color: #2e3135;"><span aria-hidden="true">«</span></a></li>
+                            @for (int i = 0; i < Math.Ceiling(count / max); i++)
+                            {
+                            <li class="page-item @(currentPage == i + 1 ? "active" : "")" style="color: #2e3135; @(currentPage == i + 1 ? "background: #2e3135;" : "")"><a class="page-link" href="/history/@guildId/@(i + 1)" style="@(currentPage == i + 1 ? "background: #2e3135;" : "color: #2e3135;")">@(i + 1)</a></li>
+                            }
+                            <li class="page-item @(!forward ? "disabled" : "")"><a class="page-link" href="@(currentPage + 1 > Math.Ceiling(count / max) ? "" : $"/history/{guildId}/{currentPage + 1}")" aria-label="Next" style="color: #2e3135;"><span aria-hidden="true">»</span></a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code
+{
+    [Parameter]
+    public long guildId { get; set; } = 1;
+
+    //PageNavigation
+    private float count;
+    private float max = 10;
+
+    private bool backward;
+    private bool forward;
+
+    private string newUri;
+
+    [Parameter]
+    public int currentPage { get; set; } = 1;
+
+    //History
+    ICollection<models.History> history { get; set; }
+
+    private System.Timers.Timer timer;
+
+    private int GetShowingTo()
+    {
+        int nextMax = (int)(currentPage * max);
+        if (max >= count || nextMax > count) return (int)count;
+        return nextMax;
+    }
+
+    private async Task OnMaxChanged(ChangeEventArgs e)
+    {
+        if (e.Value != null) max = int.Parse(e.Value.ToString() ?? "25");
+        await ReloadAsync();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await ReloadAsync();
+        await base.OnParametersSetAsync();
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        timer = new System.Timers.Timer(2000);
+        timer.Elapsed += (sender, args) =>
+        {
+            ReloadAsync();
+            InvokeAsync(StateHasChanged);
+        };
+        timer.AutoReset = true;
+        timer.Enabled = true;
+        return base.OnInitializedAsync();
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        //Ensure we're on the same, right page.
+        if (currentPage < 1)
+        {
+            _nav.NavigateTo($"/history/{guildId}/1");
+            return;
+        }
+
+        //Normalize the page values.
+        var maxPages = Math.Ceiling(count / max);
+        if (maxPages > 0)
+        {
+            if (currentPage < 1)
+            {
+                _nav.NavigateTo($"/history/{guildId}/1");
+                return;
+            }
+            if (currentPage > maxPages)
+            {
+                _nav.NavigateTo($"/history/{guildId}");
+                return;
+            }
+        }
+        base.OnAfterRender(firstRender);
+    }
+
+    private async Task ReloadAsync()
+    {
+        history = null;
+
+        await using miudiscordbotContext context = _dbFactory.CreateDbContext();
+
+        int skip = (int)(currentPage * max - max);
+        if (skip < 1) skip = 0;
+
+        history = context.Histories.Where(x => x.GuildId == guildId).AsEnumerable().Reverse().ToList();
+
+        count = history.Count;
+
+        forward = Math.Ceiling(count / max) > 1 && currentPage != Math.Ceiling(count / max);
+        backward = currentPage >= 2;
+
+        history = history.Skip(skip).Take((int)max).ToList();
+
+        newUri = $"/history/{guildId}/{currentPage}";
+        _jsRuntime.InvokeVoidAsync("ChangeUrl", newUri);
+    }
+
+    protected override async void OnParametersSet()
+    {
+        await ReloadAsync();
+        await base.OnParametersSetAsync();
+    }
+
+    private static DateTime JavaTimeStampToDateTime(long javaTimeStamp)
+    {
+        // Java timestamp is milliseconds past epoch
+        DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+        dateTime = dateTime.AddMilliseconds(javaTimeStamp).ToLocalTime();
+        return dateTime;
+    }
+}
