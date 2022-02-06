@@ -37,7 +37,7 @@ jobs:
         run: dotnet restore
       - name: Build
         run: |
-          cd Nekos
+          cd Miu-Dashboard-6.0
           dotnet build --configuration Release
           dotnet publish -c Release
         
