@@ -88,7 +88,7 @@
                 <div class="card-body">
                     <ApexChart TItem="History" Height="500">
                         <ApexPointSeries TItem="History" Items="context.Histories.Where(x => x.GuildId == guildId)" SeriesType="SeriesType.Area" Name="Queued" XValue="history => Utils.JavaTimeStampToDateTime(history.DateTime).ToShortDateString()" YAggregate="histories => histories.Count()"></ApexPointSeries>
-                        <ApexPointSeries TItem="History" Items="context.Histories.Where(x => x.GuildId == guildId)" SeriesType="SeriesType.Area" Name="Actually played" XValue="history => Utils.JavaTimeStampToDateTime(history.DateTime).ToShortDateString()" YAggregate="histories => histories.Count(x => x.Played)"></ApexPointSeries>
+                        <ApexPointSeries TItem="History" Items="context.Histories.Where(x => x.GuildId == guildId)" SeriesType="SeriesType.Area" Name="Actually played" XValue="@(history => Utils.JavaTimeStampToDateTime(history.DateTime).ToString("dd.MM.yyyy"))" YAggregate="histories => histories.Count(x => x.Played)"></ApexPointSeries>
                     </ApexChart>
                 </div>
             </div>
