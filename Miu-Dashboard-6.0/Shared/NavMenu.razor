@@ -8,7 +8,7 @@
         <hr class="sidebar-divider my-0">
         <ul class="navbar-nav text-light" id="accordionSidebar">
             <li class="nav-item"><NavLink class="nav-link" Match="NavLinkMatch.All" ActiveClass="active" href="@($"{_nav.Uri[_nav.Uri.LastIndexOf("/", StringComparison.Ordinal)..].Replace("/", "")}")"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></NavLink></li>
-            <li class="nav-item"><NavLink class="nav-link" ActiveClass="active" href="@($"table/{_nav.Uri[_nav.Uri.LastIndexOf("/", StringComparison.Ordinal)..].Replace("/", "")}")"><i class="fas fa-table"></i><span>Table</span></NavLink></li>
+            <li class="nav-item"><NavLink class="nav-link" ActiveClass="active" href="@($"table/{_nav.Uri[_nav.Uri.LastIndexOf("/", StringComparison.Ordinal)..].Replace("/", "")}")"><i class="fas fa-table"></i><span>History</span></NavLink></li>
         </ul>
         <div class="text-center d-none d-md-inline">
             <button class="btn rounded-circle border-0" id="sidebarToggle" type="button" @onclick="ToggleNavMenu"></button>
