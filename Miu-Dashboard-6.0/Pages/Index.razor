@@ -28,7 +28,7 @@
                 </div>
                 <div class="px-3">
                     <h2 class="fw-bold mb-0">@context.Histories.Count(x => x.GuildId == guildId)</h2>
-                    <p class="mb-0">Total songs queued</p>
+                    <p class="mb-0" style="color: rgb(140,142,157);">Total songs queued</p>
                 </div>
             </div>
         </div>
@@ -41,7 +41,7 @@
                 </div>
                 <div class="px-3">
                     <h2 class="fw-bold mb-0">@context.Histories.Count(x => x.GuildId == guildId && x.Played)</h2>
-                    <p class="mb-0">Total songs played</p>
+                    <p class="mb-0" style="color: rgb(140,142,157);">Total songs played</p>
                 </div>
             </div>
         </div>
@@ -54,7 +54,7 @@
                 </div>
                 <div class="px-3">
                     <h2 class="fw-bold mb-0">@context.Histories.Count(x => x.GuildId == guildId && x.Queued)</h2>
-                    <p class="mb-0">Songs currently queued</p>
+                    <p class="mb-0"style="color: rgb(140,142,157);">Songs currently queued</p>
                 </div>
             </div>
         </div>
@@ -67,7 +67,7 @@
                 </div>
                 <div class="px-3">
                     <h2 class="fw-bold mb-0">#@(context.Histories.AsEnumerable().GroupBy(x => x.GuildId).OrderByDescending(x => x.Count()).ToList().FindIndex(grouping => grouping.Key == guildId) + 1)</h2>
-                    <p class="mb-0">Ranking (all Discords)</p>
+                    <p class="mb-0" style="color: rgb(140,142,157);">Ranking (all Discords)</p>
                 </div>
             </div>
         </div>
