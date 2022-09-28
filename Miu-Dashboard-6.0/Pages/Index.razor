@@ -16,84 +16,70 @@
 
 <div class="container-fluid">
     <div class="d-sm-flex justify-content-between align-items-center mb-4">
-        <h3 class="text-dark mb-0">Dashboard</h3>
+        <h3 class="text-white mb-0">Dashboard</h3>
     </div>
-    <div class="row">
-        <div class="col-md-6 col-xl-3 mb-4">
-            <div class="card border-start-primary py-2" style="border-left: 5px solid rgb(78,115,223);box-shadow: 3px 3px 10px;">
-                <div class="card-body">
-                    <div class="row align-items-center no-gutters">
-                        <div class="col me-2">
-                            <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Total Queued</span></div>
-                            <div class="text-dark fw-bold h5 mb-0"><span>@context.Histories.Count(x => x.GuildId == guildId)</span></div>
-                        </div>
-                        <div class="col-auto"><i class="fas fa-history fa-2x"></i></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6 col-xl-3 mb-4">
-            <div class="card border-start-success py-2" style="box-shadow: 3px 3px 10px;border-left: 5px solid rgb(28,200,138) ;">
-                <div class="card-body">
-                    <div class="row align-items-center no-gutters">
-                        <div class="col me-2">
-                            <div class="text-uppercase text-success fw-bold text-xs mb-1"><span>Total Played</span></div>
-                            <div class="text-dark fw-bold h5 mb-0"><span>@context.Histories.Count(x => x.GuildId == guildId && x.Played)</span></div>
-                        </div>
-                        <div class="col-auto"><i class="fas fa-play fa-2x"></i></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6 col-xl-3 mb-4">
-            <div class="card border-start-info py-2" style="box-shadow: 3px 3px 10px;border-left: 5px solid rgb(54,185,204) ;">
-                <div class="card-body">
-                    <div class="row align-items-center no-gutters">
-                        <div class="col me-2">
-                            <div class="text-uppercase text-info fw-bold text-xs mb-1"><span>Ranking (All Discords)</span></div>
-                            <div class="text-dark fw-bold h5 mb-0 me-3"><span>#@(context.Histories.AsEnumerable().GroupBy(x => x.GuildId).OrderByDescending(x => x.Count()).ToList().FindIndex(grouping => grouping.Key == guildId) + 1)</span></div>
-                        </div>
-                        <div class="col-auto"><i class="fas fa-chart-line fa-2x"></i></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6 col-xl-3 mb-4">
-            <div class="card border-start-warning py-2" style="box-shadow: 3px 3px 10px;border-left: 5px solid rgb(246,194,62) ;">
-                <div class="card-body">
-                    <div class="row align-items-center no-gutters">
-                        <div class="col me-2">
-                            <div class="text-uppercase text-warning fw-bold text-xs mb-1"><span>Currently Queued</span></div>
-                            <div class="text-dark fw-bold h5 mb-0"><span>@context.Histories.Count(x => x.GuildId == guildId && x.Queued)</span></div>
-                        </div>
-                        <div class="col-auto"><i class="fas fa-cogs fa-2x"></i></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div><!-- Start: Chart -->
-    <div class="row">
+    <div class="row gy-4 row-cols-2 row-cols-md-4">
         <div class="col">
-            <div class="card mb-4" style="box-shadow: 3px 3px 10px;">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h6 class="text-primary fw-bold m-0">Queued VS actually played songs</h6>
-                    <div class="dropdown no-arrow">
-                        <button class="btn btn-link btn-sm dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button"><i class="fas fa-ellipsis-v text-gray-400"></i></button>
-                        <div class="dropdown-menu shadow dropdown-menu-end animated--fade-in">
-                            <p class="text-center dropdown-header">dropdown header:</p><a class="dropdown-item" href="#">&nbsp;Action</a><a class="dropdown-item" href="#">&nbsp;Another action</a>
-                            <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Something else here</a>
-                        </div>
-                    </div>
+            <div class="text-center d-flex flex-column justify-content-center align-items-center py-3">
+                <div class="bs-icon-xl bs-icon-circle bs-icon-primary d-flex flex-shrink-0 justify-content-center align-items-center d-inline-block mb-2 bs-icon lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-clock-history">
+                        <path d="M8.515 1.019A7 7 0 0 0 8 1V0a8 8 0 0 1 .589.022l-.074.997zm2.004.45a7.003 7.003 0 0 0-.985-.299l.219-.976c.383.086.76.2 1.126.342l-.36.933zm1.37.71a7.01 7.01 0 0 0-.439-.27l.493-.87a8.025 8.025 0 0 1 .979.654l-.615.789a6.996 6.996 0 0 0-.418-.302zm1.834 1.79a6.99 6.99 0 0 0-.653-.796l.724-.69c.27.285.52.59.747.91l-.818.576zm.744 1.352a7.08 7.08 0 0 0-.214-.468l.893-.45a7.976 7.976 0 0 1 .45 1.088l-.95.313a7.023 7.023 0 0 0-.179-.483zm.53 2.507a6.991 6.991 0 0 0-.1-1.025l.985-.17c.067.386.106.778.116 1.17l-1 .025zm-.131 1.538c.033-.17.06-.339.081-.51l.993.123a7.957 7.957 0 0 1-.23 1.155l-.964-.267c.046-.165.086-.332.12-.501zm-.952 2.379c.184-.29.346-.594.486-.908l.914.405c-.16.36-.345.706-.555 1.038l-.845-.535zm-.964 1.205c.122-.122.239-.248.35-.378l.758.653a8.073 8.073 0 0 1-.401.432l-.707-.707z"></path>
+                        <path d="M8 1a7 7 0 1 0 4.95 11.95l.707.707A8.001 8.001 0 1 1 8 0v1z"></path>
+                        <path d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5z"></path>
+                    </svg>
                 </div>
-                <div class="card-body">
-                    <ApexChart TItem="History" Height="500">
-                        <ApexPointSeries TItem="History" Items="context.Histories.Where(x => x.GuildId == guildId)" SeriesType="SeriesType.Area" Name="Queued" XValue="history => Utils.JavaTimeStampToDateTime(history.DateTime).ToShortDateString()" YAggregate="histories => histories.Count()"></ApexPointSeries>
-                        <ApexPointSeries TItem="History" Items="context.Histories.Where(x => x.GuildId == guildId)" SeriesType="SeriesType.Area" Name="Actually played" XValue="@(history => Utils.JavaTimeStampToDateTime(history.DateTime).ToString("dd.MM.yyyy"))" YAggregate="histories => histories.Count(x => x.Played)"></ApexPointSeries>
-                    </ApexChart>
+                <div class="px-3">
+                    <h2 class="fw-bold mb-0">@context.Histories.Count(x => x.GuildId == guildId)</h2>
+                    <p class="mb-0">Total songs queued</p>
                 </div>
             </div>
         </div>
-    </div><!-- End: Chart -->
+        <div class="col">
+            <div class="text-center d-flex flex-column justify-content-center align-items-center py-3">
+                <div class="bs-icon-xl bs-icon-circle bs-icon-primary d-flex flex-shrink-0 justify-content-center align-items-center d-inline-block mb-2 bs-icon lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-play-fill">
+                        <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"></path>
+                    </svg>
+                </div>
+                <div class="px-3">
+                    <h2 class="fw-bold mb-0">@context.Histories.Count(x => x.GuildId == guildId && x.Played)</h2>
+                    <p class="mb-0">Total songs played</p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="text-center d-flex flex-column justify-content-center align-items-center py-3">
+                <div class="bs-icon-xl bs-icon-circle bs-icon-primary d-flex flex-shrink-0 justify-content-center align-items-center d-inline-block mb-2 bs-icon lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-gear-wide-connected">
+                        <path d="M7.068.727c.243-.97 1.62-.97 1.864 0l.071.286a.96.96 0 0 0 1.622.434l.205-.211c.695-.719 1.888-.03 1.613.931l-.08.284a.96.96 0 0 0 1.187 1.187l.283-.081c.96-.275 1.65.918.931 1.613l-.211.205a.96.96 0 0 0 .434 1.622l.286.071c.97.243.97 1.62 0 1.864l-.286.071a.96.96 0 0 0-.434 1.622l.211.205c.719.695.03 1.888-.931 1.613l-.284-.08a.96.96 0 0 0-1.187 1.187l.081.283c.275.96-.918 1.65-1.613.931l-.205-.211a.96.96 0 0 0-1.622.434l-.071.286c-.243.97-1.62.97-1.864 0l-.071-.286a.96.96 0 0 0-1.622-.434l-.205.211c-.695.719-1.888.03-1.613-.931l.08-.284a.96.96 0 0 0-1.186-1.187l-.284.081c-.96.275-1.65-.918-.931-1.613l.211-.205a.96.96 0 0 0-.434-1.622l-.286-.071c-.97-.243-.97-1.62 0-1.864l.286-.071a.96.96 0 0 0 .434-1.622l-.211-.205c-.719-.695-.03-1.888.931-1.613l.284.08a.96.96 0 0 0 1.187-1.186l-.081-.284c-.275-.96.918-1.65 1.613-.931l.205.211a.96.96 0 0 0 1.622-.434l.071-.286zM12.973 8.5H8.25l-2.834 3.779A4.998 4.998 0 0 0 12.973 8.5zm0-1a4.998 4.998 0 0 0-7.557-3.779l2.834 3.78h4.723zM5.048 3.967c-.03.021-.058.043-.087.065l.087-.065zm-.431.355A4.984 4.984 0 0 0 3.002 8c0 1.455.622 2.765 1.615 3.678L7.375 8 4.617 4.322zm.344 7.646.087.065-.087-.065z"></path>
+                    </svg>
+                </div>
+                <div class="px-3">
+                    <h2 class="fw-bold mb-0">@context.Histories.Count(x => x.GuildId == guildId && x.Queued)</h2>
+                    <p class="mb-0">Songs currently queued</p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="text-center d-flex flex-column justify-content-center align-items-center py-3">
+                <div class="bs-icon-xl bs-icon-circle bs-icon-primary d-flex flex-shrink-0 justify-content-center align-items-center d-inline-block mb-2 bs-icon lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-graph-up">
+                        <path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0Zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07Z"></path>
+                    </svg>
+                </div>
+                <div class="px-3">
+                    <h2 class="fw-bold mb-0">#@(context.Histories.AsEnumerable().GroupBy(x => x.GuildId).OrderByDescending(x => x.Count()).ToList().FindIndex(grouping => grouping.Key == guildId) + 1)</h2>
+                    <p class="mb-0">Ranking (all Discords)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="background: #1c1d21; padding-top: 20px; padding-right: 20px; padding-bottom: 20px; padding-left: 20px; border-radius: 25px; margin-top: 15px; max-height: 30%;">
+        <ApexChart TItem="History" Height="500">
+            <ApexPointSeries TItem="History" Items="context.Histories.Where(x => x.GuildId == guildId)" SeriesType="SeriesType.Area" Name="Queued" XValue="history => Utils.JavaTimeStampToDateTime(history.DateTime).ToShortDateString()" YAggregate="histories => histories.Count()"></ApexPointSeries>
+            <ApexPointSeries TItem="History" Items="context.Histories.Where(x => x.GuildId == guildId)" SeriesType="SeriesType.Area" Name="Actually played" XValue="@(history => Utils.JavaTimeStampToDateTime(history.DateTime).ToString("dd.MM.yyyy"))" YAggregate="histories => histories.Count(x => x.Played)"></ApexPointSeries>
+        </ApexChart>
+    </div>
 </div>
 
 @code

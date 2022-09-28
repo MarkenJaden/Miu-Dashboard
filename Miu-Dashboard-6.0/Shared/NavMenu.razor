@@ -1,17 +1,22 @@
 ﻿@inject NavigationManager _nav
 
-<nav class="@navMenuToggle" style="background: #2a3056;">
-    <div class="container-fluid d-flex flex-column p-0"><a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
-            <div class="sidebar-brand-icon rotate-n-15"><i class="fas fa-music"></i></div>
-            <div class="sidebar-brand-text mx-3"><span>Miu Dashboard</span></div>
-        </a>
-        <hr class="sidebar-divider my-0">
-        <ul class="navbar-nav text-light" id="accordionSidebar">
-            <li class="nav-item"><NavLink class="nav-link" Match="NavLinkMatch.All" ActiveClass="active" href="@($"{_nav.Uri[_nav.Uri.LastIndexOf("/", StringComparison.Ordinal)..].Replace("/", "")}")"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></NavLink></li>
-            <li class="nav-item"><NavLink class="nav-link" ActiveClass="active" href="@($"table/{_nav.Uri[_nav.Uri.LastIndexOf("/", StringComparison.Ordinal)..].Replace("/", "")}")"><i class="fas fa-table"></i><span>History</span></NavLink></li>
-        </ul>
-        <div class="text-center d-none d-md-inline">
-            <button class="btn rounded-circle border-0" id="sidebarToggle" type="button" @onclick="ToggleNavMenu"></button>
+<nav class="@navMenuToggle" style="background: #1c1d21;">
+    <div class="container-fluid d-flex flex-column p-0">
+        <div class="row" style="margin-top: 30px;">
+            <div class="col"><a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
+                    <div class="sidebar-brand-icon rotate-n-15"><i class="fas fa-music"></i></div>
+                </a>
+                <hr class="sidebar-divider my-0">
+                <ul class="navbar-nav text-light" id="accordionSidebar">
+                    <li class="nav-item"><NavLink class="nav-link" Match="NavLinkMatch.All" ActiveClass="active" href="@($"{_nav.Uri[_nav.Uri.LastIndexOf("/", StringComparison.Ordinal)..].Replace("/", "")}")"><i class="fas fa-tachometer-alt" style="margin-right: 45px;font-size: 20px;margin-left: 25px;"></i><span>Dashboard</span></NavLink></li>
+                    <li class="nav-item"><NavLink class="nav-link" ActiveClass="active" href="@($"table/{_nav.Uri[_nav.Uri.LastIndexOf("/", StringComparison.Ordinal)..].Replace("/", "")}")"><i class="fas fa-table" style="margin-right: 45px;font-size: 20px;margin-left: 25px;"></i><span>Table</span></NavLink></li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col my-auto">
+                <div class="text-center"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
+            </div>
         </div>
     </div>
 </nav>

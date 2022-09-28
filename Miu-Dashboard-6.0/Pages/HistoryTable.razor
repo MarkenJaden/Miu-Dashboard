@@ -12,24 +12,20 @@
 }
 
 <div class="container-fluid">
-    <h3 class="text-dark mb-4">History</h3>
-    <div class="card shadow">
-        <div class="card-body">
-            <Table @ref="table" TItem="History" DataSource="dbContext.Histories.Where(x => x.GuildId == guildId).ToList().OrderByDescending(history => Utils.JavaTimeStampToDateTime(history.DateTime))" Responsive>
-                <Column @bind-Field="@(context.Name)" Sortable Filterable></Column>
-                <Column @bind-Field="@(context.Link)" Sortable Filterable>
-                    <a href="@context.Link" target="_blank">@context.Link</a>
-                </Column>
-                <Column @bind-Field="@(context.Queued)" Filterable>
-                    <i class="@(!context.Queued ? "fas fa-times" : "fas fa-check")"></i>
-                </Column>
-                <Column @bind-Field="@(context.Played)" Filterable>
-                    <i class="@(!context.Played ? "fas fa-times" : "fas fa-check")"></i>
-                </Column>
-                <Column Title="Date and Time" Field="@(Utils.JavaTimeStampToDateTime(context.DateTime).ToString("dd.MM.yyyy HH:mm:ss"))"></Column>
-            </Table>
-        </div>
-    </div>
+    <h3 class="text-light mb-4">History</h3>
+    <Table @ref="table" TItem="History" DataSource="dbContext.Histories.Where(x => x.GuildId == guildId).ToList().OrderByDescending(history => Utils.JavaTimeStampToDateTime(history.DateTime))" Responsive>
+        <Column @bind-Field="@(context.Name)" Sortable Filterable></Column>
+        <Column @bind-Field="@(context.Link)" Sortable Filterable>
+            <a href="@context.Link" target="_blank">@context.Link</a>
+        </Column>
+        <Column @bind-Field="@(context.Queued)" Filterable>
+            <i class="@(!context.Queued ? "fas fa-times" : "fas fa-check")"></i>
+        </Column>
+        <Column @bind-Field="@(context.Played)" Filterable>
+            <i class="@(!context.Played ? "fas fa-times" : "fas fa-check")"></i>
+        </Column>
+        <Column Title="Date and Time" Field="@(Utils.JavaTimeStampToDateTime(context.DateTime).ToString("dd.MM.yyyy HH:mm:ss"))"></Column>
+    </Table>
 </div>
 
 @code
