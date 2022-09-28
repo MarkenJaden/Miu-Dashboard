@@ -5,8 +5,6 @@
 @using Miu_Dashboard_6._0.Utils
 
 @inject IDbContextFactory<miudiscordbotContext> _dbFactory
-@inject NavigationManager _nav
-@inject IJSRuntime _jsRuntime
 
 @{
     var context = _dbFactory.CreateDbContext();
@@ -76,7 +74,7 @@
     </div>
     <div style="background: #1c1d21; padding-top: 20px; padding-right: 20px; padding-bottom: 20px; padding-left: 20px; border-radius: 25px; margin-top: 15px; max-height: 30%;">
         <ApexChart TItem="History" Height="500">
-            <ApexPointSeries TItem="History" Items="context.Histories.Where(x => x.GuildId == guildId)" SeriesType="SeriesType.Area" Name="Queued" XValue="history => Utils.JavaTimeStampToDateTime(history.DateTime).ToShortDateString()" YAggregate="histories => histories.Count()"></ApexPointSeries>
+            <ApexPointSeries TItem="History" Items="context.Histories.Where(x => x.GuildId == guildId)" SeriesType="SeriesType.Area" Name="Queued" XValue="@(history => Utils.JavaTimeStampToDateTime(history.DateTime).ToString(" dd.MM.yyyy"))" YAggregate="histories => histories.Count()"></ApexPointSeries>
             <ApexPointSeries TItem="History" Items="context.Histories.Where(x => x.GuildId == guildId)" SeriesType="SeriesType.Area" Name="Actually played" XValue="@(history => Utils.JavaTimeStampToDateTime(history.DateTime).ToString("dd.MM.yyyy"))" YAggregate="histories => histories.Count(x => x.Played)"></ApexPointSeries>
         </ApexChart>
     </div>
