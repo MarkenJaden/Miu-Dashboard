@@ -24,7 +24,7 @@ namespace Miu_Dashboard_6._0.models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseMySql($"server=65.21.224.42;database=miu-discord-bot;user id=miu-discord-bot;password={File.ReadAllText("sensitive-data")}", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.6.5-mariadb"));
+                optionsBuilder.UseMySql($"server=65.21.224.42;database=miu-discord-bot;user id=miu-discord-bot;password={File.ReadAllText("sensitive-data")}", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.6.12-mariadb"));
             }
         }
 
@@ -47,9 +47,13 @@ namespace Miu_Dashboard_6._0.models
                     .HasColumnType("bigint(20)")
                     .HasColumnName("ChannelID");
 
-                entity.Property(e => e.SettingIdleImage)
-                    .HasColumnType("text")
-                    .HasColumnName("Setting_IdleImage");
+                entity.Property(e => e.IdleImage).HasColumnType("text");
+
+                entity.Property(e => e.ShowDashboard)
+                    .IsRequired()
+                    .HasDefaultValueSql("'1'");
+
+                entity.Property(e => e.Text).HasColumnType("text");
 
                 entity.Property(e => e.VoiceChannelId)
                     .HasColumnType("bigint(20)")
