@@ -10,36 +10,32 @@
 
 <PageTitle>History</PageTitle>
 
-@{
-    var dbContext = _dbFactory.CreateDbContext();
-}
-
 @*<div class="container-fluid">*@
 
-    <MudTable Items="dbContext.Histories.Where(x => x.GuildId == guildId).ToList().OrderByDescending(history => Utils.JavaTimeStampToDateTime(history.DateTime))" Hover="true" SortLabel="Sort By" FixedHeader="true" Filter="new Func<History,bool>(FilterFunc1)">
-        <ToolBarContent>
-            <MudText Typo="Typo.h6">History</MudText>
-            <MudSpacer />
-            <MudTextField @bind-Value="searchString1" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
-        </ToolBarContent>
-        <HeaderContent>
-            <MudTh><MudTableSortLabel T="string">Name</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel T="string">Link</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel T="bool">Currently queued</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel T="bool">Played</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel T="DateTime" InitialDirection="SortDirection.Descending">Date and Time</MudTableSortLabel></MudTh>
-        </HeaderContent>
-        <RowTemplate>
-            <MudTd DataLabel="Name">@context.Name</MudTd>
-            <MudTd DataLabel="Link"><a href="@context.Link" target="_blank">@context.Link</a></MudTd>
-            <MudTd DataLabel="Currently queued"><i class="@(!context.Queued ? "fas fa-times" : "fas fa-check")"></i></MudTd>
-            <MudTd DataLabel="Played"><i class="@(!context.Played ? "fas fa-times" : "fas fa-check")"></i></MudTd>
-            <MudTd DataLabel="Date and Time">@(Utils.JavaTimeStampToDateTime(context.DateTime).ToString("dd.MM.yyyy HH:mm:ss"))"</MudTd>
-        </RowTemplate>
-        <PagerContent>
-            <MudTablePager />
-        </PagerContent>
-    </MudTable>
+<MudTable Items="@Elements" Hover="true" SortLabel="Sort By" FixedHeader="true" Filter="new Func<History,bool>(FilterFunc1)">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">History</MudText>
+        <MudSpacer />
+        <MudTextField @bind-Value="searchString1" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh><MudTableSortLabel SortBy="new Func<History, object>(x=>x.Name)">Name</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<History, object>(x=>x.Link)">Link</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<History, object>(x=>x.Queued)"> Currently queued</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<History, object>(x=>x.Played)">Played</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<History, object>(x=>Utils.JavaTimeStampToDateTime(x.DateTime))" InitialDirection="SortDirection.Descending">Date and Time</MudTableSortLabel></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Name">@context.Name</MudTd>
+        <MudTd DataLabel="Link"><a href="@context.Link" target="_blank">@context.Link</a></MudTd>
+        <MudTd DataLabel="Currently queued"><i class="@(!context.Queued ? "fas fa-times" : "fas fa-check")"></i></MudTd>
+        <MudTd DataLabel="Played"><i class="@(!context.Played ? "fas fa-times" : "fas fa-check")"></i></MudTd>
+        <MudTd DataLabel="Date and Time">@(Utils.JavaTimeStampToDateTime(context.DateTime).ToString("dd.MM.yyyy HH:mm:ss"))"</MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
 
 @*</div>*@
 
@@ -50,9 +46,15 @@
 
     private string searchString1 = "";
 
-    ITable table;
+    private IEnumerable<History> Elements;
 
     private System.Timers.Timer timer;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var context = await _dbFactory.CreateDbContextAsync();
+        Elements = context.Histories.Where(x => x.GuildId == guildId).ToList();
+    }
 
     private bool FilterFunc1(History element) => FilterFunc(element, searchString1);
 
