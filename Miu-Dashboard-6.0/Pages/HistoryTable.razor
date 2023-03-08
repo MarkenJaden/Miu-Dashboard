@@ -54,7 +54,7 @@
 
     private bool FilterFunc1(History element) => FilterFunc(element, searchString1);
 
-    private bool FilterFunc(History element, string searchString)
+    private static bool FilterFunc(History element, string searchString)
     {
         if (string.IsNullOrWhiteSpace(searchString))
             return true;
