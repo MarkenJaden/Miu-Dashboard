@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Miu_Dashboard_6._0.models;
+using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,8 +8,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddAntDesign();
+builder.Services.AddMudServices();
 builder.Services.AddDbContextFactory<miudiscordbotContext>(options =>
-    options.UseMySql($"server=65.21.224.42;database=miu-discord-bot;user id=miu-discord-bot;password={File.ReadAllText("sensitive-data")}", ServerVersion.Parse("10.6.5-mariadb")));
+    options.UseMySql($"server=65.21.224.42;database=miu-discord-bot;user id=miu-discord-bot;password={File.ReadAllText("sensitive-data")}", ServerVersion.Parse("10.6.12-mariadb")));
 
 var app = builder.Build();
 
