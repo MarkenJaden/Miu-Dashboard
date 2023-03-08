@@ -7,7 +7,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddAntDesign();
 builder.Services.AddMudServices();
 builder.Services.AddDbContextFactory<miudiscordbotContext>(options =>
     options.UseMySql($"server=65.21.224.42;database=miu-discord-bot;user id=miu-discord-bot;password={File.ReadAllText("sensitive-data")}", ServerVersion.Parse("10.6.12-mariadb")));

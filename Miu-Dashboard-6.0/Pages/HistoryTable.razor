@@ -5,12 +5,8 @@
 @using SortDirection = MudBlazor.SortDirection
 
 @inject IDbContextFactory<miudiscordbotContext> _dbFactory
-@inject NavigationManager _nav
-@inject IJSRuntime _jsRuntime
 
 <PageTitle>History</PageTitle>
-
-@*<div class="container-fluid">*@
 
 <MudTable Items="@Elements" Hover="true" SortLabel="Sort By" FixedHeader="true" Filter="new Func<History,bool>(FilterFunc1)">
     <ToolBarContent>
@@ -36,8 +32,6 @@
         <MudTablePager />
     </PagerContent>
 </MudTable>
-
-@*</div>*@
 
 @code
 {
