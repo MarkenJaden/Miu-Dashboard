@@ -70,17 +70,4 @@
             return true;
         return false;
     }
-
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-        timer = new(2000);
-        timer.Elapsed += (_, _) =>
-        {
-            table.ReloadData();
-            InvokeAsync(StateHasChanged);
-        };
-        timer.AutoReset = true;
-        timer.Enabled = true;
-    }
 }
