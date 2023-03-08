@@ -15,18 +15,20 @@
         <MudTextField @bind-Value="searchString1" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
     </ToolBarContent>
     <HeaderContent>
-        <MudTh><MudTableSortLabel SortBy="new Func<History, object>(x=>x.Name)">Name</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel SortBy="new Func<History, object>(x=>x.Link)">Link</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel SortBy="new Func<History, object>(x=>x.Queued)"> Currently queued</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel SortBy="new Func<History, object>(x=>x.Played)">Played</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<History, object>(x=>Utils.JavaTimeStampToDateTime(x.DateTime))" InitialDirection="SortDirection.Descending">Date and Time</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<History, object>(x => x.Name)">Name</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<History, object>(x => x.Link)">Link</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<History, object>(x=> x.UserId)" InitialDirection="SortDirection.Descending">Queued by</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<History, object>(x => x.Queued)"> Currently queued</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<History, object>(x => x.Played)">Played</MudTableSortLabel></MudTh>
     </HeaderContent>
     <RowTemplate>
+        <MudTd DataLabel="Date and Time">@(Utils.JavaTimeStampToDateTime(context.DateTime).ToString("dd.MM.yyyy HH:mm:ss"))"</MudTd>
         <MudTd DataLabel="Name">@context.Name</MudTd>
         <MudTd DataLabel="Link"><a href="@context.Link" target="_blank">@context.Link</a></MudTd>
+        <MudTd DataLabel="Queued by">@context.UserId</MudTd>
         <MudTd DataLabel="Currently queued"><i class="@(!context.Queued ? "fas fa-times" : "fas fa-check")"></i></MudTd>
         <MudTd DataLabel="Played"><i class="@(!context.Played ? "fas fa-times" : "fas fa-check")"></i></MudTd>
-        <MudTd DataLabel="Date and Time">@(Utils.JavaTimeStampToDateTime(context.DateTime).ToString("dd.MM.yyyy HH:mm:ss"))"</MudTd>
     </RowTemplate>
     <PagerContent>
         <MudTablePager />
@@ -61,6 +63,8 @@
         if (element.Link.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         if (Utils.JavaTimeStampToDateTime(element.DateTime).ToString("dd.MM.yyyy HH:mm:ss").Contains(searchString))
+            return true;
+        if (element.UserId != null && element.UserId.ToString()!.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         return false;
     }

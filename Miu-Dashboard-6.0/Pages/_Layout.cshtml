@@ -39,7 +39,7 @@
 
     <script>
         Blazor.start().then(() => {
-            Blazor.defaultReconnectionHandler._reconnectCallback = function (d) {
+            Blazor.defaultReconnectionHandler._reconnectCallback = function () {
                 document.location.reload();
             }
         });

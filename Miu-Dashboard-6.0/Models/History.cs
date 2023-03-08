@@ -12,5 +12,6 @@ namespace Miu_Dashboard_6._0.models
         public long GuildId { get; set; }
         public bool Queued { get; set; }
         public bool Played { get; set; }
+        public long? UserId { get; set; }
     }
 }

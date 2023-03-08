@@ -80,6 +80,10 @@ namespace Miu_Dashboard_6._0.models
                 entity.Property(e => e.Link).HasColumnType("text");
 
                 entity.Property(e => e.Name).HasColumnType("text");
+
+                entity.Property(e => e.UserId)
+                    .HasColumnType("bigint(20)")
+                    .HasColumnName("UserID");
             });
 
             OnModelCreatingPartial(modelBuilder);
