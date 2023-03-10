@@ -23,7 +23,7 @@
         <MudTh><MudTableSortLabel SortBy="new Func<History, object>(x => x.Played)">Played</MudTableSortLabel></MudTh>
     </HeaderContent>
     <RowTemplate>
-        <MudTd DataLabel="Date and Time">@(Utils.JavaTimeStampToDateTime(context.DateTime).ToString("dd.MM.yyyy HH:mm:ss"))"</MudTd>
+        <MudTd DataLabel="Date and Time">@(Utils.JavaTimeStampToDateTime(context.DateTime).ToString("dd.MM.yyyy HH:mm:ss"))</MudTd>
         <MudTd DataLabel="Name">@context.Name</MudTd>
         <MudTd DataLabel="Link"><a href="@context.Link" target="_blank">@context.Link</a></MudTd>
         <MudTd DataLabel="Queued by">@context.UserId</MudTd>
